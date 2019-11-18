@@ -46,9 +46,9 @@ public class MachineShop extends SimulationProcess
         try
         {
             Breaks B = null;
-            Arrivals A = new Arrivals(8);
-            MachineShop.M = new Machine(8);
-            Job J = new Job();
+            Arrivals A = new Arrivals(25);
+            MachineShop.M = new Machine();
+            Job J = new Job(20);
 
             A.activate();
 

@@ -52,7 +52,7 @@ public class Arrivals extends SimulationProcess
             {
             }
 
-            new Job();
+            new Job(20);
         }
     }
 
