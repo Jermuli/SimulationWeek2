@@ -51,10 +51,19 @@ public class MachineShop extends SimulationProcess
             	Machine newMachine = new Machine();
             	IdleQ.Enqueue(newMachine);
             }
-            Job J = new Job(20);
+            
+            Machine machine2 = new Machine();
+            IdleQ2.Enqueue(machine2);
+
+            for(int i = 0; i < 3; i++){
+                Machine newMachine3 = new Machine();
+                IdleQ3.Enqueue(newMachine3);
+            }
+            
+            Job J = new Job(40);
 
             A.activate();
-
+            
             if (useBreaks)
             {
                 B = new Breaks();
@@ -80,12 +89,24 @@ public class MachineShop extends SimulationProcess
                     + (MachineFailedTime / MachineActiveTime));
             System.out.println("Average number of jobs present = "
                     + (JobsInQueue / CheckFreq));
+            System.out.println("Preparations done " + Machine1Jobs + " times");
+            System.out.println("Operations done " + Machine2Jobs + " times");
+            System.out.println("Recovery done " + Machine3Jobs + " times");
+            System.out.println("Time spent on preperation " + PrepTime);
+            System.out.println("Time spent on operation " + OperTime);
+            System.out.println("Time spent on recovery " + RecTime);
 
             Simulation.stop();
 
             A.terminate();
-            while(!IdleQ.IsEmpty() ) {
+            while(!IdleQ.IsEmpty()) {
             	IdleQ.Dequeue().terminate();
+            }
+            while(!IdleQ2.IsEmpty()) {
+                IdleQ2.Dequeue().terminate();
+            }
+            while(!IdleQ3.IsEmpty()) {
+                IdleQ3.Dequeue().terminate();
             }
             /*
             while(!BusyQ.IsEmpty() ) {
@@ -114,8 +135,29 @@ public class MachineShop extends SimulationProcess
     
     public static ProcessQueue IdleQ = new ProcessQueue();
     
+    public static ProcessQueue IdleQ2 = new ProcessQueue();
+    
+    public static ProcessQueue IdleQ3 = new ProcessQueue();
+    
+    public static Queue JobQ2 = new Queue();
+    
+    public static Queue JobQ3 = new Queue();
+    
+    /*public static Queue Q2 = new Queue();
     //public static ProcessQueue BusyQ = new ProcessQueue();
 
+    public static Machine2 M = null;
+    
+    public static Queue JobQ2 = new Queue();
+    
+    public static long JobsInQueue2 = 0;
+    
+    public static double MachineActiveTime2 = 0.0;
+    
+    public static long ProcessedJobs2 = 0;
+    
+    public static long CheckFreq2 = 0;*/
+    
     public static Queue JobQ = new Queue();
 
     public static double TotalResponseTime = 0.0;
@@ -131,6 +173,18 @@ public class MachineShop extends SimulationProcess
     public static double MachineActiveTime = 0.0;
 
     public static double MachineFailedTime = 0.0;
+    
+    public static double PrepTime = 0.0;
+    
+    public static double OperTime = 0.0;
+    
+    public static double RecTime = 0.0;
+    
+    public static long Machine1Jobs = 0;
+    
+    public static long Machine2Jobs = 0;
+    
+    public static long Machine3Jobs = 0;
 
     private boolean useBreaks;
 }

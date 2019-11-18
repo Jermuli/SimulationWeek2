@@ -46,12 +46,11 @@ public class Job
         MachineShop.JobQ.enqueue(this);
         MachineShop.TotalJobs++;
 
-        if (empty && !MachineShop.IdleQ.IsEmpty() )
+        if (!empty && !MachineShop.IdleQ.IsEmpty() )
                 //&& MachineShop.M.isOperational())
         {
             try
             {
-                
             	M = MachineShop.IdleQ.Dequeue();
             	M.activate();
             }
@@ -63,12 +62,49 @@ public class Job
             }
         }
     }
-
+    
     public void finished ()
     {
         ResponseTime = Scheduler.currentTime() - ArrivalTime;
         MachineShop.TotalResponseTime += ResponseTime;
         MachineShop.IdleQ.Enqueue(M);
+        this.STime = new ExponentialStream(25);
+        MachineShop.JobQ2.enqueue(this);
+        if (!MachineShop.JobQ2.isEmpty() && !MachineShop.IdleQ2.IsEmpty()){
+            this.ServiceTime = this.generateServiceTime();
+            M = MachineShop.IdleQ2.Dequeue();
+            try {
+                M.activate();
+            } catch (SimulationException e)
+            {
+            } catch (RestartException e)
+            {
+            }
+        }
+    }
+    
+    public void finished2 ()
+    {
+        MachineShop.IdleQ2.Enqueue(M);
+        MachineShop.JobQ3.enqueue(this);
+        this.STime = new ExponentialStream(40);
+        if (!MachineShop.JobQ3.isEmpty() && !MachineShop.IdleQ3.IsEmpty()){
+            this.ServiceTime = this.generateServiceTime();
+            M = MachineShop.IdleQ3.Dequeue();
+            try {
+                M.activate();
+            } catch (SimulationException e) 
+            {
+            } catch (RestartException e) 
+            {
+            }
+        }
+        
+    }
+    
+    public void finished3 ()
+    {
+        MachineShop.IdleQ3.Enqueue(M);
         M = null;
     }
     
