@@ -25,6 +25,7 @@ import java.io.IOException;
 import org.javasim.RestartException;
 import org.javasim.Scheduler;
 import org.javasim.SimulationException;
+import org.javasim.SimulationProcess;
 import org.javasim.streams.ExponentialStream;
 
 public class Job
@@ -37,19 +38,22 @@ public class Job
         
         ResponseTime = 0.0;
         ArrivalTime = Scheduler.currentTime();
-        //ServiceTime = Scheduler.currentTime();
         ServiceTime = generateServiceTime();
+        
+        M = null;
 
         empty = MachineShop.JobQ.isEmpty();
         MachineShop.JobQ.enqueue(this);
         MachineShop.TotalJobs++;
 
-        if (empty && !MachineShop.M.processing()
-                && MachineShop.M.isOperational())
+        if (empty && !MachineShop.IdleQ.IsEmpty() )
+                //&& MachineShop.M.isOperational())
         {
             try
             {
-                MachineShop.M.activate();
+                
+            	M = MachineShop.IdleQ.Dequeue();
+            	M.activate();
             }
             catch (SimulationException e)
             {
@@ -64,6 +68,8 @@ public class Job
     {
         ResponseTime = Scheduler.currentTime() - ArrivalTime;
         MachineShop.TotalResponseTime += ResponseTime;
+        MachineShop.IdleQ.Enqueue(M);
+        M = null;
     }
     
     public double generateServiceTime ()
@@ -82,6 +88,8 @@ public class Job
     {
     	return ServiceTime;
     }
+    
+    private ExponentialStream STime;
 
     private double ResponseTime;
 
@@ -89,5 +97,5 @@ public class Job
     
     private double ServiceTime;
     
-    private ExponentialStream STime;
+    public SimulationProcess M;
 }
