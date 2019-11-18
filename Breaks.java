@@ -18,7 +18,7 @@
  * (C) 1990-2008,
  */
 
-package org.javasim.examples.basic;
+package org.javasim.examples.SimulationWeek2;
 
 import java.io.IOException;
 
@@ -58,7 +58,7 @@ public class Breaks extends SimulationProcess
                 MachineShop.M.fixed();
 
                 if (interrupted_service)
-                    MachineShop.M.activateAt(MachineShop.M.serviceTime()
+                    MachineShop.M.activateAt(MachineShop.M.getCurrentJob().getServiceTime()
                             + currentTime());
                 else
                     MachineShop.M.activate();

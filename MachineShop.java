@@ -18,7 +18,7 @@
  * (C) 1990-2008,
  */
 
-package org.javasim.examples.basic;
+package org.javasim.examples.SimulationWeek2;
 
 import org.javasim.RestartException;
 import org.javasim.Scheduler;
