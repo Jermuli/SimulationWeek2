@@ -47,7 +47,10 @@ public class MachineShop extends SimulationProcess
         {
             Breaks B = null;
             Arrivals A = new Arrivals(25);
-            MachineShop.M = new Machine();
+            for(int i = 0; i < 3; i++) {
+            	Machine newMachine = new Machine();
+            	IdleQ.Enqueue(newMachine);
+            }
             Job J = new Job(20);
 
             A.activate();
@@ -81,7 +84,14 @@ public class MachineShop extends SimulationProcess
             Simulation.stop();
 
             A.terminate();
-            MachineShop.M.terminate();
+            while(!IdleQ.IsEmpty() ) {
+            	IdleQ.Dequeue().terminate();
+            }
+            /*
+            while(!BusyQ.IsEmpty() ) {
+            	BusyQ.Dequeue().terminate();
+            }
+            */
 
             if (useBreaks)
                 B.terminate();
@@ -101,8 +111,10 @@ public class MachineShop extends SimulationProcess
         this.resumeProcess();
         SimulationProcess.mainSuspend();
     }
-
-    public static Machine M = null;
+    
+    public static ProcessQueue IdleQ = new ProcessQueue();
+    
+    //public static ProcessQueue BusyQ = new ProcessQueue();
 
     public static Queue JobQ = new Queue();
 

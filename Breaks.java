@@ -38,6 +38,7 @@ public class Breaks extends SimulationProcess
 
     public void run ()
     {
+    	/*
         while (!terminated())
         {
             try
@@ -48,6 +49,8 @@ public class Breaks extends SimulationProcess
 
                 MachineShop.M.broken();
                 MachineShop.M.cancel();
+                Machine M = (Machine)MachineShop.IdleQ.Dequeue();
+                M.broken();
 
                 if (!MachineShop.JobQ.isEmpty())
                     interrupted_service = true;
@@ -75,6 +78,7 @@ public class Breaks extends SimulationProcess
             {
             }
         }
+        */
     }
 
     private UniformStream RepairTime;
@@ -82,4 +86,6 @@ public class Breaks extends SimulationProcess
     private UniformStream OperativeTime;
 
     private boolean interrupted_service;
+    
+    private ProcessQueue BrokenMachines;
 }
