@@ -47,7 +47,6 @@ public class Job
         MachineShop.TotalJobs++;
 
         if (!empty && !MachineShop.IdleQ.IsEmpty() )
-                //&& MachineShop.M.isOperational())
         {
             try
             {

@@ -47,7 +47,7 @@ public class MachineShop extends SimulationProcess
         {
             Breaks B = null;
             Arrivals A = new Arrivals(25);
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < PrepRooms; i++) {
             	Machine newMachine = new Machine();
             	IdleQ.Enqueue(newMachine);
             }
@@ -61,7 +61,7 @@ public class MachineShop extends SimulationProcess
             }
             
             Job J = new Job(40);
-
+            monitor.activate();
             A.activate();
             
             if (useBreaks)
@@ -71,7 +71,11 @@ public class MachineShop extends SimulationProcess
             }
 
             Simulation.start();
+            hold(5000);
+            monitor.restart();
 
+            hold(5000);
+            monitor.report();
             while (MachineShop.ProcessedJobs < 1000)
                 hold(1000);
 
@@ -94,11 +98,12 @@ public class MachineShop extends SimulationProcess
             System.out.println("Recovery done " + Machine3Jobs + " times");
             System.out.println("Time spent on preperation " + PrepTime);
             System.out.println("Time spent on operation " + OperTime);
-            System.out.println("Time spent on recovery " + RecTime);
+            System.out.println("Time spent on recovery " + RecTime + "\n");
 
             Simulation.stop();
 
             A.terminate();
+            monitor.terminate();
             while(!IdleQ.IsEmpty()) {
             	IdleQ.Dequeue().terminate();
             }
@@ -108,11 +113,6 @@ public class MachineShop extends SimulationProcess
             while(!IdleQ3.IsEmpty()) {
                 IdleQ3.Dequeue().terminate();
             }
-            /*
-            while(!BusyQ.IsEmpty() ) {
-            	BusyQ.Dequeue().terminate();
-            }
-            */
 
             if (useBreaks)
                 B.terminate();
@@ -133,6 +133,8 @@ public class MachineShop extends SimulationProcess
         SimulationProcess.mainSuspend();
     }
     
+    public static int PrepRooms = 3;
+    
     public static ProcessQueue IdleQ = new ProcessQueue();
     
     public static ProcessQueue IdleQ2 = new ProcessQueue();
@@ -143,20 +145,7 @@ public class MachineShop extends SimulationProcess
     
     public static Queue JobQ3 = new Queue();
     
-    /*public static Queue Q2 = new Queue();
-    //public static ProcessQueue BusyQ = new ProcessQueue();
-
-    public static Machine2 M = null;
-    
-    public static Queue JobQ2 = new Queue();
-    
-    public static long JobsInQueue2 = 0;
-    
-    public static double MachineActiveTime2 = 0.0;
-    
-    public static long ProcessedJobs2 = 0;
-    
-    public static long CheckFreq2 = 0;*/
+    public static Reporter monitor = new Reporter(100);
     
     public static Queue JobQ = new Queue();
 
