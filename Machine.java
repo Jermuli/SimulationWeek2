@@ -18,7 +18,7 @@
  * (C) 1990-2008,
  */
 
-package org.javasim.examples.basic;
+package org.javasim.examples.SimulationWeek2;
 
 import java.io.IOException;
 
@@ -29,9 +29,8 @@ import org.javasim.streams.ExponentialStream;
 
 public class Machine extends SimulationProcess
 {
-    public Machine(double mean)
+    public Machine()
     {
-        STime = new ExponentialStream(mean);
         operational = true;
         working = false;
         J = null;
@@ -55,7 +54,7 @@ public class Machine extends SimulationProcess
 
                 try
                 {
-                    hold(serviceTime());
+                    hold(J.getServiceTime() );
                 }
                 catch (SimulationException e)
                 {
@@ -108,19 +107,9 @@ public class Machine extends SimulationProcess
         return working;
     }
 
-    public double serviceTime ()
-    {
-        try
-        {
-            return STime.getNumber();
-        }
-        catch (IOException e)
-        {
-            return 0.0;
-        }
+    public Job getCurrentJob() {
+    	return J;
     }
-
-    private ExponentialStream STime;
 
     private boolean operational;
 

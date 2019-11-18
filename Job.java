@@ -18,21 +18,27 @@
  * (C) 1990-2008,
  */
 
-package org.javasim.examples.basic;
+package org.javasim.examples.SimulationWeek2;
+
+import java.io.IOException;
 
 import org.javasim.RestartException;
 import org.javasim.Scheduler;
 import org.javasim.SimulationException;
+import org.javasim.streams.ExponentialStream;
 
 public class Job
 {
-    public Job()
+    public Job(double mean)
     {
         boolean empty = false;
 
+        STime = new ExponentialStream(mean);
+        
         ResponseTime = 0.0;
         ArrivalTime = Scheduler.currentTime();
-        ServiceTime = Scheduler.currentTime();
+        //ServiceTime = Scheduler.currentTime();
+        ServiceTime = generateServiceTime();
 
         empty = MachineShop.JobQ.isEmpty();
         MachineShop.JobQ.enqueue(this);
@@ -59,10 +65,29 @@ public class Job
         ResponseTime = Scheduler.currentTime() - ArrivalTime;
         MachineShop.TotalResponseTime += ResponseTime;
     }
+    
+    public double generateServiceTime ()
+    {
+        try
+        {
+            return STime.getNumber();
+        }
+        catch (IOException e)
+        {
+            return 0.0;
+        }
+    }
+    
+    public double getServiceTime()
+    {
+    	return ServiceTime;
+    }
 
     private double ResponseTime;
 
     private double ArrivalTime;
     
     private double ServiceTime;
+    
+    private ExponentialStream STime;
 }
